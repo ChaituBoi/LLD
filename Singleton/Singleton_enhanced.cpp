@@ -4,8 +4,11 @@ Singleton-
 2. operator = overloading deleted.
 *******************************************************************************/
 #include <iostream>
+#include <thread>
+#include <mutex>
 using namespace std;
 
+mutex SingletonMutex;
 class Singleton{
   
   private:
@@ -33,6 +36,7 @@ class Singleton{
 Singleton* Singleton::mySingleInstance = NULL;
 Singleton* Singleton::getInstance()
 {
+    lock_guard<mutex> lock(SingletonMutex); //thread safe
     if(mySingleInstance==NULL)
     {
         mySingleInstance = new Singleton;
