@@ -2,6 +2,7 @@
 Singleton- 
 1. Copy constructor disabled.
 2. operator = overloading deleted.
+3. getInstance() is thread-safe
 *******************************************************************************/
 #include <iostream>
 #include <thread>
