@@ -1,6 +1,6 @@
 public class Singleton {
 
-    private static int data;
+    private static int data; //not necessary to make static.
     private Singleton(int val)
     {
         data = val;
