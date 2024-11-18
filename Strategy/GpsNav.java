@@ -39,7 +39,7 @@ class GPS
     }
 }
 //context here
-public class Main {
+public class GpsNav {
 
     public static void main(String[] args) {
 
@@ -65,11 +65,6 @@ public class Main {
                 throw new RuntimeException("Please enter correct input.");
 
         }
-
-
         gps.buildRoute();
-
-
-
     }
 }
