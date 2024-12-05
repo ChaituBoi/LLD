@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+//IObserver and IObservable are the crux of this pattern. The rest is customisable.
 interface IObserver{
   void update(String data);
 }
