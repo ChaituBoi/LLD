@@ -53,6 +53,22 @@ class Pizza
     int toppingCount;
     int price = 0;
 
+    Pizza(Pizza &pizza) //deep copy for returning pizza from builder (prototype logic)
+    {
+        this->crust = pizza.crust;
+        for(int ind=0;ind<pizza.toppingCount;ind++)
+        {
+            this->toppings[ind] = pizza.toppings[ind];
+        }
+        this->toppingCount = pizza.toppingCount;
+        this->price = pizza.price;
+    }
+
+    Pizza* clone()//prototype logic
+    {
+        return new Pizza(*this);
+    }
+
     Pizza()
     {
         crust="DEFAULT";
@@ -70,8 +86,10 @@ class Pizza
         {
             std::cout << toppings[ind] << " ";
         }
+
         std::cout << std::endl << "It costs Rs "<<price<<std::endl;
     }
+
 };
 //
 class ConcretePizzaBuilder : public IPizzaBuilder
@@ -80,9 +98,9 @@ class ConcretePizzaBuilder : public IPizzaBuilder
         Pizza pizza;
     public:
         //void setPizza(Pizza *ptr){};
-        Pizza getPizza()
+        Pizza* getPizza()
         {
-            return pizza;
+            return pizza.clone(); //prototype logic
         }
         void setPizzaBase(std::string crustType) 
         {
@@ -156,26 +174,27 @@ int main()
     initCrustToPriceMap();
 
     ConcretePizzaBuilder builder;
-    builder.removePizzaToppings("CAPSICUM");//topping not present log
     
     builder.setPizzaBase("THIN_CRUST");
     builder.addPizzaToppings("CAPSICUM");
-    builder.addPizzaToppings("ONIONzz");//invalid topping type log
-    builder.removePizzaToppings("CAPSICUM");
+    builder.addPizzaToppings("ONION");//invalid topping type log
+    builder.addPizzaToppings("PANEER");
 
     builder.addPizzaToppings("PAPRIKA");
-    Pizza pizza = builder.getPizza();
-    pizza.seePizza();
-    
+    Pizza* pizza = builder.getPizza();
+    pizza->seePizza();
 
+    builder.removePizzaToppings("ONION"); //try to make changes in pizza again to see if we really received a deep copy of the pizza.
+    pizza->seePizza();
 
     /*
     Output:
-    
-    Action: REMTOP. Topping not present.
-    Action: ADDTOP. Invalid topping type.
-    Pizza is having crust: THIN_CRUST with toppings: PAPRIKA
-    It costs Rs 270    
+
+    Action: ADDTOP. Max toppings amount reached. Please remove before adding.
+    Pizza is having crust: THIN_CRUST with toppings: CAPSICUM ONION PANEER    
+    It costs Rs 360
+    Pizza is having crust: THIN_CRUST with toppings: CAPSICUM ONION PANEER    
+    It costs Rs 360    //shows that we really received a deep copy of the pizza
     */
     return 0;
 }
