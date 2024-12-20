@@ -37,11 +37,14 @@ class Singleton{
 Singleton* Singleton::mySingleInstance = NULL;
 Singleton* Singleton::getInstance()
 {
-    lock_guard<mutex> lock(SingletonMutex); //thread safe
-    if(mySingleInstance==NULL)
+    
+    if(mySingleInstance==NULL)//double locking
     {
-        mySingleInstance = new Singleton;
-        return mySingleInstance;
+        lock_guard<mutex> lock(SingletonMutex); 
+        if(mySingleInstance==NULL) //double locking
+        {
+            mySingleInstance = new Singleton;
+        }   
     }
     return mySingleInstance;
 }
